@@ -16,4 +16,7 @@
         completions."
     </string>
     <string name="title_activity_connect">Connect</string>
+    <string name="facebook_app_id">949259611787628</string>
+    <string name="firebase_base_url">https://sizzling-fire-4878.firebaseio.com/</string>
+    <string name="action_logout">logout</string>
 </resources>
