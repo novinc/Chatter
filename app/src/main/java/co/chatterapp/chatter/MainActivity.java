@@ -8,15 +8,12 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
-import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
-import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseApp;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -53,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
             ((TextView) findViewById(R.id.hello_world)).setText(((TextView) findViewById(R.id.hello_world)).getText()
                     + " " + getSharedPreferences("authinfo", MODE_PRIVATE).getString("uid", ""));
         }
+        
     }
 
     @Override
