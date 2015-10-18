@@ -1,8 +1,11 @@
 package co.chatterapp.chatter;
 
 import android.app.IntentService;
+import android.app.Service;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -19,27 +22,26 @@ import com.google.android.gms.nearby.messages.Message;
  * <p/>
  * TODO: Customize class - update intent actions and extra parameters.
  */
-public class BroadcastNearby extends IntentService implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, ResultCallback<Status> {
+public class BroadcastNearby extends Service implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, ResultCallback<Status> {
 
     GoogleApiClient mGoogleApiClient;
 
-    public BroadcastNearby() {
-        super("BroadcastNearby");
-    }
-
+    @Nullable
     @Override
-    protected void onHandleIntent(Intent intent) {
-        if (intent != null) {
-            mGoogleApiClient = new GoogleApiClient.Builder(this)
-                    .addApi(Nearby.MESSAGES_API)
-                    .addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(this)
-                    .build();
-        }
+    public IBinder onBind(Intent intent) {
+        Log.v("blah", "on bind");
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addApi(Nearby.MESSAGES_API)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .build();
+        mGoogleApiClient.connect();
+        return null;
     }
 
     @Override
     public void onConnected(Bundle bundle) {
+        Log.v("blah", "connected");
         byte[] array = {11, 22, 33};
         Message message = new Message(array);
         Nearby.Messages.publish(mGoogleApiClient, message)
@@ -48,12 +50,12 @@ public class BroadcastNearby extends IntentService implements GoogleApiClient.Co
 
     @Override
     public void onConnectionSuspended(int i) {
-
+        Log.v("blah", "on connection suspended");
     }
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-
+        Log.v("blah", "connection failed");
     }
 
     @Override
