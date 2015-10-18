@@ -1,22 +1,23 @@
 package co.chatterapp.chatter;
 
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
-import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
-import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseApp;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -53,6 +54,30 @@ public class MainActivity extends AppCompatActivity {
             ((TextView) findViewById(R.id.hello_world)).setText(((TextView) findViewById(R.id.hello_world)).getText()
                     + " " + getSharedPreferences("authinfo", MODE_PRIVATE).getString("uid", ""));
         }
+        Intent intent = new Intent(this, BroadcastNearby.class);
+        bindService(intent, new ServiceConnection() {
+            @Override
+            public void onServiceConnected(ComponentName name, IBinder service) {
+                Log.v("blah", "service connected");
+            }
+
+            @Override
+            public void onServiceDisconnected(ComponentName name) {
+                Log.v("blah", "disconnected");
+            }
+        }, Context.BIND_AUTO_CREATE);
+        Intent intent1 = new Intent(this, FetchNearbyDevices.class);
+        bindService(intent1, new ServiceConnection() {
+            @Override
+            public void onServiceConnected(ComponentName name, IBinder service) {
+
+            }
+
+            @Override
+            public void onServiceDisconnected(ComponentName name) {
+
+            }
+        }, BIND_IMPORTANT);
     }
 
     @Override

@@ -6,6 +6,8 @@ android {
 
     packagingOptions {
         exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE-FIREBASE.txt'
+
         exclude 'META-INF/NOTICE'
     }
 
@@ -32,4 +34,6 @@ dependencies {
     compile 'com.google.android.gms:play-services-nearby:8.1.0'
     compile 'com.firebase:firebase-client-android:2.4.0+'
     compile project(':facebook-android-sdk-4.7.0')
+    compile 'com.firebase:firebase-client-android:2.3.1'
+    compile 'com.firebaseui:firebase-ui:0.2.0'
 }
