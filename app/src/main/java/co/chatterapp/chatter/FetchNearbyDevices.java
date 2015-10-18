@@ -1,8 +1,11 @@
 package co.chatterapp.chatter;
 
 import android.app.IntentService;
+import android.app.Service;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -19,50 +22,49 @@ import com.google.android.gms.nearby.messages.MessageListener;
  * a service on a separate handler thread.
  * <p/>
  */
-public class FetchNearbyDevices extends IntentService implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, ResultCallback<Status> {
+public class FetchNearbyDevices extends Service implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, ResultCallback<Status> {
 
     private MessageListener messageListener;
     private GoogleApiClient mGoogleApiClient;
 
-    public FetchNearbyDevices() {
-        super("FetchNearbyDevices");
-    }
-
+    @Nullable
     @Override
-    protected void onHandleIntent(Intent intent) {
+    public IBinder onBind(Intent intent) {
         if (intent != null) {
+            Log.v("blah", "on bind");
             mGoogleApiClient = new GoogleApiClient.Builder(this)
                     .addApi(Nearby.MESSAGES_API)
                     .addConnectionCallbacks(this)
                     .addOnConnectionFailedListener(this)
                     .build();
-            // Create an instance of MessageListener
-            messageListener = new MessageListener() {
-                @Override
-                public void onFound(final Message message) {
-                    Log.v("blah", "" + message.getContent().length);
-                }
-            };
-
-            Nearby.Messages.subscribe(mGoogleApiClient, messageListener)
-                    .setResultCallback(this);
+            mGoogleApiClient.connect();
 
         }
+        return null;
     }
 
     @Override
     public void onConnected(Bundle bundle) {
+        Log.v("blah", "connected");
+        messageListener = new MessageListener() {
+            @Override
+            public void onFound(final Message message) {
+                Log.v("blah", "" + message.getContent().length);
+            }
+        };
 
+        Nearby.Messages.subscribe(mGoogleApiClient, messageListener)
+                .setResultCallback(this);
     }
 
     @Override
     public void onConnectionSuspended(int i) {
-
+        Log.v("blah", "on connection suspended");
     }
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-
+        Log.v("blah", "connection failed");
     }
 
     @Override
